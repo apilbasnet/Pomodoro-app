@@ -172,7 +172,7 @@ function App() {
             className='flex-1 mr-1 pl-2' />
 
             <button onClick={handleAdd}  className='py-1 rounded-none'>
-              Add
+              Add data
             </button>
         </div>
         <ol className=''>
