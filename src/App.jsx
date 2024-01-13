@@ -151,7 +151,7 @@ function App() {
   <>
   <div className='w-screen h-screen bg-neutral-900 flex flex-col justify-center items-center'>
    <div className='w-auto flex flex-row justify-center items-center  font-serif mb-8'>
-      <h1 className='mb-10'>
+      <h1 className='mb-10 font-customFont text-7xl'>
         They don{`'`}t know me son. 
         <span className=' text-sm  flex flex-row-reverse'>
          -David Goggins
@@ -172,8 +172,8 @@ function App() {
   <div className=' flex gap-5   '>
     
    
-      <div className=' bg-neutral-800 p-6 shadow-md '>
-        <h1  className='text-xl text-center font-serif mb-1'>To do List</h1>
+      <div className=' bg-neutral-800 p-6 pt-[10px] shadow-md '>
+        <h1  className='text-xl font-semibold text-center mb-1'>To do List</h1>
 
         <div className='flex h-8 mb-2   '>
         <input 
