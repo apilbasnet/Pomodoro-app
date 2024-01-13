@@ -149,13 +149,25 @@ function App() {
 
   return (
   <>
+  <div className='w-screen h-screen bg-neutral-900 flex flex-col justify-center items-center'>
+   <div className='w-auto flex flex-row justify-center items-center  font-serif mb-8'>
+      <h1 className='mb-10'>
+        They don{`'`}t know me son. 
+        <span className=' text-sm  flex flex-row-reverse'>
+         -David Goggins
+          </span> 
+
+
+        
+      </h1>
+      </div>
   
   <div  className='absolute top-1 right-1 m-1'>
     {playback ? <VolumeUpIcon className='hover:cursor-pointer' onClick={toggleplayback}/> : <VolumeOffIcon className='hover:cursor-pointer' onClick={toggleplayback}/>}
 
     
     </div>
-  <div className='w-screen h-screen border flex justify-center items-center'>
+  <div className=' flex justify-center items-center'>
   
   <div className=' flex gap-5   '>
     
@@ -194,17 +206,7 @@ function App() {
 
       </div>
     <div className=' h-80  bg-neutral-800  shadow-md p-6  flex flex-col justify-between items-center '>
-      {/* <div className='w-auto flex justify-center items-center  font-serif mb-8'>
-      <h1 className=''>
-        They don{`'`}t know me son. 
-        <span className=' text-sm  flex flex-row-reverse'>
-         -David Goggins
-          </span> 
-
-
-        
-      </h1>
-      </div> */}
+     
 
 <div className=' gap-2 flex justify-center items-center '>
     <button onClick={workTimer}>
@@ -241,6 +243,7 @@ function App() {
     
     </div>  
 
+    </div>
     </div>
     </div>
     </>
