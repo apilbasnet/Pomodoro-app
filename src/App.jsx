@@ -1,8 +1,9 @@
-import { useState,useEffect } from 'react'
+import { useState,useEffect, useRef } from 'react'
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+
 
 function App() {
   const [timer, setTimer] = useState(1500);
@@ -10,17 +11,17 @@ function App() {
   const [isWorktime, setIsWorktime] = useState(true);
   const [playWorksound, setPlayWorksound] = useState(false);
   const [playBreaksound, setPlayBreaksound] = useState(false);
-  const [playback, setPlayback] = useState(true); 
+  const [playback, setPlayback] = useState(false); 
   const [task, setTask] = useState([]);
   const [newTask, setNewTask] = useState(''); 
-
 
 
   
   let workSound = new Audio('./work.mp3')
   let breakSound = new Audio('./break.mp3')
   let stopSound = new Audio('./stop.mp3')
-  
+
+
   function toggleplayback(){
     setPlayback((prevPlayback) => !prevPlayback);
 
@@ -42,6 +43,7 @@ function App() {
     if (isActive && timer>0 ) 
     {
       interval = setInterval(() => {
+       
         setTimer(prevTimer => prevTimer-1);
       }, 1000);
     } else if (timer===0) {
