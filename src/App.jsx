@@ -3,7 +3,8 @@ import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-
+import SettingsIcon from '@mui/icons-material/Settings';
+import Dialog from './Dialog';
 
 function App() {
   const [timer, setTimer] = useState(1500);
@@ -14,6 +15,7 @@ function App() {
   const [playback, setPlayback] = useState(false); 
   const [task, setTask] = useState([]);
   const [newTask, setNewTask] = useState(''); 
+    const [dialog, setDialog] = useState(false);
 
 
   
@@ -26,6 +28,7 @@ function App() {
     setPlayback((prevPlayback) => !prevPlayback);
 
   }
+
   // useEffect(()=>{
   //   if(playback){
   //     workSound.play();
@@ -151,6 +154,7 @@ function App() {
 
   return (
   <>
+   {dialog ? <Dialog onClose={()=> setDialog(false)}></Dialog> : null}
   <div className='w-screen h-screen bg-neutral-900 flex flex-col justify-center items-center'>
    <div className='w-auto flex flex-row justify-center items-center  font-serif mb-8'>
       <h1 className='mb-10 font-customFont text-7xl'>
@@ -164,9 +168,10 @@ function App() {
       </h1>
       </div>
   
-  <div  className='absolute top-1 right-1 m-1'>
+  <div  className='absolute top-1 right-1 m-1 flex flex-col gap-2'>
+    <SettingsIcon onClick={()=> setDialog(!dialog)}></SettingsIcon>
+   
     {playback ? <VolumeUpIcon className='hover:cursor-pointer' onClick={toggleplayback}/> : <VolumeOffIcon className='hover:cursor-pointer' onClick={toggleplayback}/>}
-
     
     </div>
   <div className=' flex justify-center items-center'>
@@ -251,5 +256,7 @@ function App() {
     </>
   )
 }
+
+export {}
 
 export default App
