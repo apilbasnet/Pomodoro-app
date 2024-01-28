@@ -15,7 +15,9 @@ function App() {
   const [playback, setPlayback] = useState(false); 
   const [task, setTask] = useState([]);
   const [newTask, setNewTask] = useState(''); 
-    const [dialog, setDialog] = useState(false);
+  const [dialog, setDialog] = useState(false);
+  const [autoBreak, setautoBreak] = useState(false);
+  const [autoPomo, setautoPomo] = useState(false);
 
 
   
@@ -50,7 +52,8 @@ function App() {
         setTimer(prevTimer => prevTimer-1);
       }, 1000);
     } else if (timer===0) {
-      setIsActive(true);
+      {autoPomo ? setIsActive(true) : setIsActive(false)}
+      {autoBreak ? setIsActive(true) : setIsActive(false)}
       setIsWorktime(prev => !prev);
       setTimer(isWorktime ? 300 : 1500);
       stopSound.play();
@@ -77,7 +80,8 @@ function App() {
   }
 
   const workTimer =()=>{
-    setIsActive(true);
+    
+    {autoPomo ? setIsActive(true) : setIsActive(false)}
     setTimer(1500);
     setIsWorktime(true);
 
@@ -85,13 +89,13 @@ function App() {
   }
 
   const breakTime =() =>{
-    setIsActive(true);
+    {autoBreak ? setIsActive(true) : setIsActive(false)}
     setTimer(300);
     setIsWorktime(false);
   }
 
   const longBreakTime =() =>{
-    setIsActive(true);
+    {autoBreak ? setIsActive(true) : setIsActive(false)}
     setTimer(900);
     setIsWorktime(false);
   }
@@ -149,12 +153,25 @@ function App() {
     return `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
   }
 
+  const handleautoBreak = (data) => {
+    setautoBreak(data);
+  }
 
+  const handleautoPomo = (data) => { 
+    setautoPomo(data)
+   }
 
+  function handleDialogOff(data) {
+    setDialog(data);
+  } 
+
+   
+ 
 
   return (
   <>
-   {dialog ? <Dialog onClose={()=> setDialog(false)}></Dialog> : null}
+   {dialog ? <Dialog isDialogOn={handleDialogOff} autoBreakMain={handleautoBreak} autoPomoMain={handleautoPomo} onClose={()=> setDialog(false)}></Dialog> : null}
+  
   <div className='w-screen h-screen bg-neutral-900 flex flex-col justify-center items-center'>
    <div className='w-auto flex flex-row justify-center items-center  font-serif mb-8'>
       <h1 className='mb-10 font-customFont text-7xl'>
