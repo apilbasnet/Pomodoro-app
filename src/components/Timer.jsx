@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, React, useContext } from "react";
+import { useState, useEffect } from "react";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
@@ -6,34 +6,34 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import SettingsIcon from "@mui/icons-material/Settings";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Dialog from "../Dialog";
-import { useMyContext } from "../context/DialogContext";
+import { useSelector } from "react-redux";
 
 function Timer() {
-  const dialogValues = useMyContext();
   const [timer, setTimer] = useState(1500);
   const [isActive, setIsActive] = useState(false);
   const [isWorktime, setIsWorktime] = useState(true);
-  const [playWorksound, setPlayWorksound] = useState(false);
-  const [playBreaksound, setPlayBreaksound] = useState(false);
+  // const [playWorksound, setPlayWorksound] = useState(false);
+  // const [playBreaksound, setPlayBreaksound] = useState(false);
   const [playback, setPlayback] = useState(false);
   const [task, setTask] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [dialog, setDialog] = useState(false);
-  const [autoBreak, setautoBreak] = useState(false);
-  const [autoPomo, setautoPomo] = useState(false);
-  const [isTimeChanged, setIsTimeChanged] = useState(25);
-  const [isBreakChanged, setIsBreakChanged] = useState(5);
-  const [isLongBreakChanged, setIsLongBreakChanged] = useState(10);
 
-  let workSound = new Audio("./work.mp3");
-  let breakSound = new Audio("./break.mp3");
+  const {
+    pomodoro: pomodoroValue,
+    shortBreak: shortBreakValue,
+    longBreak: longBreakValue,
+    autoStartPomo: autoStartPomoValue,
+    autoStartBreak: autoStartBreakValue,
+  } = useSelector((state) => state.timer);
+
+  // let workSound = new Audio("./work.mp3");
+  // let breakSound = new Audio("./break.mp3");
   let stopSound = new Audio("./stop.mp3");
 
-  // console.log(dialogValues);
-
   useEffect(() => {
-    setTimer(dialogValues.Pomodoro * 60);
-  }, [dialogValues.Pomodoro]);
+    setTimer(pomodoroValue * 60);
+  }, [dialog]);
 
   function toggleplayback() {
     setPlayback((prevPlayback) => !prevPlayback);
@@ -57,13 +57,11 @@ function Timer() {
         setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
     } else if (timer === 0) {
-      dialogValues.AutoStartPomo ? setIsActive(true) : setIsActive(false);
-      dialogValues.AutoStartBreak ? setIsActive(true) : setIsActive(false);
+      autoStartPomoValue ? setIsActive(true) : setIsActive(false);
+      autoStartBreakValue ? setIsActive(true) : setIsActive(false);
 
       setIsWorktime((prev) => !prev);
-      setTimer(
-        isWorktime ? dialogValues.ShortBreak * 60 : dialogValues.Pomodoro * 60
-      );
+      setTimer(isWorktime ? shortBreakValue * 60 : pomodoroValue * 60);
       stopSound.play();
     } else {
       clearInterval(interval);
@@ -83,21 +81,21 @@ function Timer() {
   };
 
   const workTimer = () => {
-    dialogValues.AutoStartPomo ? setIsActive(true) : setIsActive(false);
+    autoStartPomoValue ? setIsActive(true) : setIsActive(false);
 
     setIsWorktime(true);
-    setTimer(dialogValues.Pomodoro * 60);
+    setTimer(pomodoroValue * 60);
   };
 
   const breakTime = () => {
-    dialogValues.AutoStartBreak ? setIsActive(true) : setIsActive(false);
-    setTimer(dialogValues.ShortBreak * 60);
+    autoStartBreakValue ? setIsActive(true) : setIsActive(false);
+    setTimer(shortBreakValue * 60);
     setIsWorktime(false);
   };
 
   const longBreakTime = () => {
-    dialogValues.AutoStartLongBreak ? setIsActive(true) : setIsActive(false);
-    setTimer(dialogValues.LongBreak * 60);
+    autoStartBreakValue ? setIsActive(true) : setIsActive(false);
+    setTimer(longBreakValue * 60);
     setIsWorktime(false);
   };
 
@@ -220,7 +218,6 @@ function Timer() {
                       <DeleteIcon
                         className="w-20 hover:cursor-pointer"
                         onClick={() => handleDelete(index)}
-                      
                       />
                       <ArrowUpwardIcon
                         className="  hover:cursor-pointer"

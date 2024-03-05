@@ -1,48 +1,33 @@
-import { React, useEffect, useState, memo, useContext } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import TimerIcon from "@mui/icons-material/AccessTime";
 import ToggleOnIcon from "@mui/icons-material/ToggleOn";
 import ToggleOffIcon from "@mui/icons-material/ToggleOff";
 import "./index.css";
-import { useMyContext } from "./context/DialogContext";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  changePomodoro,
+  changeShortBreak,
+  changeLongBreak,
+  changeAutoStartPomo,
+  changeAutoStartBreak,
+} from "./timers/timerSlice";
 
 const Dialog = ({ isDialogOn }) => {
-  const dialogValues = useMyContext();
-  const [autoPomoToggle, setAutoPomoToggle] = useState(false);
-  const [autoBreakToggle, setAutoBreakToggle] = useState(false);
+  const {
+    pomodoro: pomodoroValue,
+    shortBreak: shortBreakValue,
+    longBreak: longBreakValue,
+    autoStartPomo: autoStartPomoValue,
+    autoStartBreak: autoStartBreakValue,
+  } = useSelector((state) => state.timer);
+
+  // console.log(autoStartPomoValue);
+  // console.log(autoStartBreakValue);
+
+  const dispatch = useDispatch();
 
   function closeDialog() {
     isDialogOn(false);
-  }
-
-  useEffect(() => {
-    setAutoPomoToggle(dialogValues.AutoStartPomo);
-      setAutoBreakToggle(dialogValues.AutoStartBreak);
-  }, [autoPomoToggle, dialogValues.AutoStartPomo, autoBreakToggle , dialogValues.AutoStartBreak]);
-
-
-
-  function handlePomo(e) {
-    dialogValues.Pomodoro = e.target.value;
-  }
-
-  function handleBreak(e) {
-    dialogValues.ShortBreak = e.target.value;
-  }
-
-  function handleLongBreak(e) {
-    dialogValues.LongBreak = e.target.value;
-  }
-
-  function Autopomodoro() {
-    setAutoPomoToggle(!autoPomoToggle);
-    dialogValues.AutoStartPomo = !dialogValues.AutoStartPomo;
-  }
-  console.log(autoPomoToggle);
-
-  function AutoBreak() {
-    setAutoBreakToggle(!autoBreakToggle);
-    dialogValues.AutoStartBreak = !dialogValues.AutoStartBreak;
   }
 
   return (
@@ -68,8 +53,10 @@ const Dialog = ({ isDialogOn }) => {
               <input
                 type="number"
                 className="input "
-                onChange={handlePomo}
-                defaultValue={dialogValues.Pomodoro}
+                value={pomodoroValue}
+                onChange={(e) => {
+                  dispatch(changePomodoro(e.target.value));
+                }}
               />
             </label>
             <label className="label">
@@ -77,8 +64,10 @@ const Dialog = ({ isDialogOn }) => {
               <input
                 type="number"
                 className="input "
-                onChange={handleBreak}
-                defaultValue={dialogValues.ShortBreak}
+                value={shortBreakValue}
+                onChange={(e) => {
+                  dispatch(changeShortBreak(e.target.value));
+                }}
               />
             </label>
             <label className="label">
@@ -86,8 +75,10 @@ const Dialog = ({ isDialogOn }) => {
               <input
                 type="number"
                 className="input"
-                onChange={handleLongBreak}
-                defaultValue={dialogValues.LongBreak}
+                value={longBreakValue}
+                onChange={(e) => {
+                  dispatch(changeLongBreak(e.target.value));
+                }}
               />
             </label>
           </div>
@@ -96,34 +87,42 @@ const Dialog = ({ isDialogOn }) => {
         <div className="text-neutral-700  ">
           <div className="flex justify-between items-center">
             <h2>Auto Start Pomodoro</h2>
-            {autoPomoToggle ? (
+            {autoStartPomoValue ? (
               <ToggleOnIcon
                 fontSize="large"
                 className="float-right mr-4 "
-                onClick={Autopomodoro}
+                onClick={() => {
+                  dispatch(changeAutoStartPomo(!autoStartPomoValue));
+                }}
               />
             ) : (
               <ToggleOffIcon
                 fontSize="large"
                 className="float-right mr-4 "
-                onClick={Autopomodoro}
+                onClick={() =>
+                  dispatch(changeAutoStartPomo(!autoStartPomoValue))
+                }
               />
             )}
           </div>
 
           <div className="flex justify-between items-center">
             <h2>Auto Start Breaks</h2>
-            {autoBreakToggle ? (
+            {autoStartBreakValue ? (
               <ToggleOnIcon
                 fontSize="large"
                 className="float-right mr-4  "
-                onClick={AutoBreak}
+                onClick={() => {
+                  dispatch(changeAutoStartBreak(!autoStartBreakValue));
+                }}
               />
             ) : (
               <ToggleOffIcon
                 fontSize="large"
                 className="float-right mr-4 "
-                onClick={AutoBreak}
+                onClick={() =>
+                  dispatch(changeAutoStartBreak(!autoStartBreakValue))
+                }
               />
             )}
           </div>
