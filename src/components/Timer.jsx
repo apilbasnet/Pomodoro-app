@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+
 import SettingsIcon from "@mui/icons-material/Settings";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Dialog from "../Dialog";
 import { useSelector } from "react-redux";
 
@@ -15,8 +13,7 @@ function Timer() {
   // const [playWorksound, setPlayWorksound] = useState(false);
   // const [playBreaksound, setPlayBreaksound] = useState(false);
   const [playback, setPlayback] = useState(false);
-  const [task, setTask] = useState([]);
-  const [newTask, setNewTask] = useState("");
+
   const [dialog, setDialog] = useState(false);
 
   const {
@@ -50,6 +47,10 @@ function Timer() {
   // },[playback])
 
   useEffect(() => {
+    console.log("Re-rendering");
+  });
+
+  useEffect(() => {
     let interval;
 
     if (isActive && timer > 0) {
@@ -69,7 +70,7 @@ function Timer() {
     return () => {
       clearInterval(interval);
     };
-  }, [isActive, timer, isWorktime]);
+  }, [isActive, isWorktime]);
 
   const startTimer = () => {
     setIsActive(true);
@@ -99,45 +100,6 @@ function Timer() {
     setIsWorktime(false);
   };
 
-  function hanldeOnChange(e) {
-    setNewTask(e.target.value);
-  }
-
-  function handleAdd() {
-    if (newTask === "") {
-      null;
-    } else {
-      setTask([...task, newTask]);
-      setNewTask("");
-    }
-  }
-
-  function handleDelete(index) {
-    setTask(task.filter((task, i) => i !== index));
-  }
-
-  function handleUp(index) {
-    if (index > 0) {
-      const updatedData = [...task];
-      [updatedData[index], updatedData[index - 1]] = [
-        updatedData[index - 1],
-        updatedData[index],
-      ];
-      setTask(updatedData);
-    }
-  }
-
-  function handleDown(index) {
-    if (index < task.length - 1) {
-      const updatedData = [...task];
-      [updatedData[index], updatedData[index + 1]] = [
-        updatedData[index + 1],
-        updatedData[index],
-      ];
-      setTask(updatedData);
-    }
-  }
-
   const timeFormat = (timer) => {
     const minutes = Math.floor(timer / 60);
     const seconds = timer % 60;
@@ -159,106 +121,45 @@ function Timer() {
         ></Dialog>
       ) : null}
 
-      <div className="w-screen h-screen bg-neutral-900 flex flex-col justify-center items-center">
-        <div className="w-auto flex flex-row justify-center items-center  font-serif mb-8">
-          <h1 className="mb-10 font-customFont text-7xl">
-            They don{`'`}t know me son.
-            <span className=" text-sm  flex flex-row-reverse">
-              -David Goggins
-            </span>
-          </h1>
-        </div>
+      <div className="absolute top-1 right-1 m-1 flex flex-col gap-2">
+        <SettingsIcon
+          className="hover:cursor-pointer"
+          onClick={() => setDialog(!dialog)}
+        ></SettingsIcon>
 
-        <div className="absolute top-1 right-1 m-1 flex flex-col gap-2">
-          <SettingsIcon
+        {playback ? (
+          <VolumeUpIcon
             className="hover:cursor-pointer"
-            onClick={() => setDialog(!dialog)}
-          ></SettingsIcon>
+            onClick={toggleplayback}
+          />
+        ) : (
+          <VolumeOffIcon
+            className="hover:cursor-pointer"
+            onClick={toggleplayback}
+          />
+        )}
+      </div>
 
-          {playback ? (
-            <VolumeUpIcon
-              className="hover:cursor-pointer"
-              onClick={toggleplayback}
-            />
-          ) : (
-            <VolumeOffIcon
-              className="hover:cursor-pointer"
-              onClick={toggleplayback}
-            />
-          )}
+      <div className=" h-80  bg-neutral-800  shadow-md p-6  flex flex-col justify-between items-center ">
+        <div className=" gap-2 flex justify-center items-center ">
+          <button onClick={workTimer}>Pomodoro</button>
+          <button className=" " onClick={breakTime}>
+            Break
+          </button>
+          <button className="" onClick={longBreakTime}>
+            Long Break
+          </button>
         </div>
-        <div className=" flex justify-center items-center">
-          <div className=" flex gap-5   ">
-            <div className=" bg-neutral-800 p-6 pt-[10px] shadow-md ">
-              <h1 className="text-xl font-semibold text-center mb-1">
-                To do List
-              </h1>
 
-              <div className="flex h-8 mb-2   ">
-                <input
-                  type="text"
-                  placeholder="Enter a task."
-                  value={newTask}
-                  onChange={hanldeOnChange}
-                  className="flex-1 mr-1 pl-2"
-                />
+        <div className="  text-8xl font-semibold flex justify-center items-center font-customFont ">
+          {timeFormat(timer)}
+        </div>
 
-                <button onClick={handleAdd} className="py-1 rounded-none">
-                  Add
-                </button>
-              </div>
-              <ol className="">
-                {task.map((task, index) => {
-                  return (
-                    <li
-                      className="px-[5px] py-[2.5px] flex items-center gap-x-1 "
-                      key={index}
-                    >
-                      <span className="flex-1">{task}</span>
-                      <DeleteIcon
-                        className="w-20 hover:cursor-pointer"
-                        onClick={() => handleDelete(index)}
-                      />
-                      <ArrowUpwardIcon
-                        className="  hover:cursor-pointer"
-                        onClick={() => handleUp(index)}
-                      >
-                        UP
-                      </ArrowUpwardIcon>
-                      <ArrowDownwardIcon
-                        className="  hover:cursor-pointer"
-                        onClick={() => handleDown(index)}
-                      >
-                        Down
-                      </ArrowDownwardIcon>
-                    </li>
-                  );
-                })}
-              </ol>
-            </div>
-            <div className=" h-80  bg-neutral-800  shadow-md p-6  flex flex-col justify-between items-center ">
-              <div className=" gap-2 flex justify-center items-center ">
-                <button onClick={workTimer}>Pomodoro</button>
-                <button className=" " onClick={breakTime}>
-                  Break
-                </button>
-                <button className="" onClick={longBreakTime}>
-                  Long Break
-                </button>
-              </div>
-
-              <div className="  text-8xl font-semibold flex justify-center items-center font-customFont ">
-                {timeFormat(timer)}
-              </div>
-
-              <div className="gap-2 flex justify-center items-center">
-                <button className="" onClick={startTimer}>
-                  Start
-                </button>
-                <button onClick={stopTimer}>Stop</button>
-              </div>
-            </div>
-          </div>
+        <div className="gap-2 flex justify-center items-center">
+          <button className="" onClick={startTimer}>
+            Start
+          </button>
+          <button onClick={stopTimer}>Stop</button>
         </div>
       </div>
     </>

@@ -21,9 +21,6 @@ const Dialog = ({ isDialogOn }) => {
     autoStartBreak: autoStartBreakValue,
   } = useSelector((state) => state.timer);
 
-  // console.log(autoStartPomoValue);
-  // console.log(autoStartBreakValue);
-
   const dispatch = useDispatch();
 
   function closeDialog() {
