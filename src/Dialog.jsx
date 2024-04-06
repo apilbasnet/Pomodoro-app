@@ -28,7 +28,10 @@ const Dialog = ({ isDialogOn }) => {
   }
 
   return (
-    <div className="absolute h-screen w-screen flex justify-center items-center backdrop-brightness-75 text-slate-800">
+    <div
+      className="absolute h-screen w-screen flex justify-center items-center backdrop-brightness-75 text-slate-800"
+      onClick={closeDialog}
+    >
       <div className="h-2/3  w-1/4 bg-neutral-100 dialog ">
         <div className="w-full  text-center  border-b-2 pb-2 ">
           <span className="ml-4">Setting</span>

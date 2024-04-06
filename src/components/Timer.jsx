@@ -1,9 +1,4 @@
 import { useState, useEffect } from "react";
-import VolumeUpIcon from "@mui/icons-material/VolumeUp";
-import VolumeOffIcon from "@mui/icons-material/VolumeOff";
-
-import SettingsIcon from "@mui/icons-material/Settings";
-import Dialog from "../Dialog";
 import { useSelector } from "react-redux";
 
 function Timer() {
@@ -12,9 +7,6 @@ function Timer() {
   const [isWorktime, setIsWorktime] = useState(true);
   // const [playWorksound, setPlayWorksound] = useState(false);
   // const [playBreaksound, setPlayBreaksound] = useState(false);
-  const [playback, setPlayback] = useState(false);
-
-  const [dialog, setDialog] = useState(false);
 
   const {
     pomodoro: pomodoroValue,
@@ -27,24 +19,6 @@ function Timer() {
   // let workSound = new Audio("./work.mp3");
   // let breakSound = new Audio("./break.mp3");
   let stopSound = new Audio("./stop.mp3");
-
-  useEffect(() => {
-    setTimer(pomodoroValue * 60);
-  }, [dialog]);
-
-  function toggleplayback() {
-    setPlayback((prevPlayback) => !prevPlayback);
-  }
-
-  // useEffect(()=>{
-  //   if(playback){
-  //     workSound.play();
-  //     breakSound.play();
-  //   }else {
-  //     workSound.pause();
-  //     breakSound.pause();
-  //   }
-  // },[playback])
 
   useEffect(() => {
     console.log("Re-rendering");
@@ -108,38 +82,8 @@ function Timer() {
       .padStart(2, "0")}`;
   };
 
-  const isDialogOn = () => {
-    setDialog(false);
-  };
-
   return (
     <>
-      {dialog ? (
-        <Dialog
-          isDialogOn={isDialogOn}
-          onClose={() => setDialog(false)}
-        ></Dialog>
-      ) : null}
-
-      <div className="absolute top-1 right-1 m-1 flex flex-col gap-2">
-        <SettingsIcon
-          className="hover:cursor-pointer"
-          onClick={() => setDialog(!dialog)}
-        ></SettingsIcon>
-
-        {playback ? (
-          <VolumeUpIcon
-            className="hover:cursor-pointer"
-            onClick={toggleplayback}
-          />
-        ) : (
-          <VolumeOffIcon
-            className="hover:cursor-pointer"
-            onClick={toggleplayback}
-          />
-        )}
-      </div>
-
       <div className=" h-80  bg-neutral-800  shadow-md p-6  flex flex-col justify-between items-center ">
         <div className=" gap-2 flex justify-center items-center ">
           <button onClick={workTimer}>Pomodoro</button>
